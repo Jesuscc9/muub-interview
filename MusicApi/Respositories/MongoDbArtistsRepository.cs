@@ -40,7 +40,6 @@ namespace MusicApi.Repositories
 			return await artistsCollection.Find(new BsonDocument()).ToListAsync();
 		}
 
-
 		public async Task UpdateArtistAsync(Artist artist)
 		{
 			var filter = filterBuilder.Eq(currentartist => currentartist.Id, artist.Id);

@@ -35,8 +35,20 @@ namespace MusicApi.Repositories
 
 		public async Task<Concert> GetConcertAsync(Guid id)
 		{
-			var filter = filterBuilder.Eq(artist => artist.Id, id);
-			return await concertsCollection.Find(filter).SingleOrDefaultAsync();
+			var match = new BsonDocument("$match", new BsonDocument("_id", id.ToString()));
+
+			var lookup = new BsonDocument("$lookup", new BsonDocument {
+						{ "from", "artists" },
+						{ "localField", "ArtistsIds" },
+						{ "foreignField", "_id" },
+						{ "as", "Artists" }
+		});
+
+			var pipeline = new BsonDocument[] { match, lookup };
+
+			var results = await concertsCollection.Aggregate<Concert>(pipeline).SingleOrDefaultAsync();
+
+			return results;
 		}
 
 		public async Task<IEnumerable<Concert>> GetConcertsAsync()
@@ -54,7 +66,6 @@ namespace MusicApi.Repositories
 			var results = await concertsCollection.Aggregate<Concert>(pipeline).ToListAsync();
 
 			return results;
-
 		}
 
 		public async Task UpdateConcertAsync(Concert concert)
