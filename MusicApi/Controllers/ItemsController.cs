@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicApi.Repositories;
 using MusicApi.Dtos;
-using MusicApi;
 using MusicApi.Models;
 
-namespace Catalog.Controllers
+namespace MusicApi.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("items")]
 
 	public class ItemsController : ControllerBase
 	{
@@ -27,7 +26,6 @@ namespace Catalog.Controllers
 		}
 
 		[HttpGet("{id}")]
-
 		public async Task<ActionResult<ItemDto>> GetItemAsync(Guid id)
 		{
 			var item = await repository.GetItemAsync(id);
@@ -53,7 +51,6 @@ namespace Catalog.Controllers
 			};
 
 			await repository.CreateItemAsync(item);
-
 			return CreatedAtAction(nameof(GetItemAsync), new { id = item.Id }, item.AsDto());
 		}
 

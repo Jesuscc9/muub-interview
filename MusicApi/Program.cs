@@ -22,6 +22,8 @@ builder.Services.AddSingleton<IMongoClient>(ServiceProvider =>
 });
 
 builder.Services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
+builder.Services.AddSingleton<IArtistRepository, MongoDbArtistsRepository>();
+builder.Services.AddSingleton<IConcertRepository, MongoDbConcertsRepository>();
 
 var app = builder.Build();
 
